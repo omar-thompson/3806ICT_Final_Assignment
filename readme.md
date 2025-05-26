@@ -1,13 +1,15 @@
-# 3806ICT Assignment 3 by:
+# 3806ICT Final Assignment 3 by:
 
--  Callam Hartley | s5113156
--  Daniel Jacobsen | s5262721
--  Todd Cooper | s2681289
--  James Hudson | s5182091
+-  Omar Thompson| s5327969 
+-  Hayley Naidoo | Change
+-  Thomas Smith | Change
+-  William Smallacomb | Change
 
-This project requires an Ubuntu environment with ROS, Gazebo, and PAT installed. It models a submarine as it explores its environment in a linear 2D fashion. The environment is resolved into a grid, where each position can contain a hostile entity, a survivor, or a marker to indicate whether it has been visited.
+** Will need to change the below when ready **
 
-Gazebo simulates the environment and provides a 3D representation in real-time. ROS drives the submarine's main control loop, which extracts a list of moves to achieve pre-defined goals from PAT. For example, PAT is called via the command line to achieve a goal, such as "return home", and returns a list of moves to a text file. ROS reads this text file and iteratively translates this moveset into a positioning system, using emulated sensors to react to its immediate surroundings.
+This project requires an Ubuntu environment with ROS, Gazebo, and PAT installed. It models a _____ as it explores its environment in a linear 2D fashion. The environment is resolved into a grid, where each position can contain a hostile entity, a survivor, or a marker to indicate whether it has been visited.
+
+Gazebo simulates the environment and provides a 3D representation in real-time. ROS drives the _____ main control loop, which extracts a list of moves to achieve pre-defined goals from PAT. For example, PAT is called via the command line to achieve a goal, such as "return home", and returns a list of moves to a text file. ROS reads this text file and iteratively translates this moveset into a positioning system, using emulated sensors to react to its immediate surroundings.
 
 To successfully run this project on your own machine:
 
