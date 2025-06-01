@@ -1,0 +1,54 @@
+/*
+This csp PAT file is responsible for generating a moveset which will achieve a goal
+based on the robot's current interpretation of its environment. 
+*/
+
+// include the expected world.csp file which defines the current environment & parameters
+#include "world.csp";
+
+// primitive tasks for overall move task
+// actions if conditions satisfied:
+	// move the position of the sub
+	// mark the new position as visited
+	// pick up survivor if there was one (onBoard++)
+
+
+#define MoveUpCond (xpos != 0) && (world[xpos-1][ypos] != Hostile) && (onBoard != maxCapacity || world[xpos-1][ypos] != Survivor);
+#define MoveUpCondVisited (world[xpos-1][ypos] == Visited);
+#define MoveUpCondNotVisited (world[xpos-1][ypos] != Visited);
+MoveUpIfVisited() = [MoveUpCond && MoveUpCondVisited] moveUp{xpos = xpos - 1; if(world[xpos][ypos] == Survivor) {onBoard++;}; world[xpos][ypos] = Visited; } -> Skip;
+MoveUpIfNotVisited() = [MoveUpCond && MoveUpCondNotVisited] moveUp{xpos = xpos - 1; if(world[xpos][ypos] == Survivor) {onBoard++;}; world[xpos][ypos] = Visited;} -> Skip;
+
+#define MoveDownCond (xpos != Rows - 1) && (world[xpos+1][ypos] != Hostile) && (onBoard != maxCapacity || world[xpos+1][ypos] != Survivor);
+#define MoveDownCondVisited (world[xpos+1][ypos] == Visited);
+#define MoveDownCondNotVisited (world[xpos+1][ypos] != Visited);
+MoveDownIfVisited() = [MoveDownCond && MoveDownCondVisited] moveDown{xpos = xpos + 1; if(world[xpos][ypos] == Survivor) {onBoard++;}; world[xpos][ypos] = Visited;} -> Skip;
+MoveDownIfNotVisited() = [MoveDownCond && MoveDownCondNotVisited] moveDown{xpos = xpos + 1; if(world[xpos][ypos] == Survivor) {onBoard++;}; world[xpos][ypos] = Visited;} -> Skip;
+
+#define MoveLeftCond (ypos != 0) && (world[xpos][ypos-1] != Hostile) && (onBoard != maxCapacity || world[xpos][ypos-1] != Survivor);
+#define MoveLeftCondVisited (world[xpos][ypos-1] == Visited);
+#define MoveLeftCondNotVisited (world[xpos][ypos-1] != Visited);
+MoveLeftIfVisited() = [MoveLeftCond && MoveLeftCondVisited] moveLeft{ypos = ypos - 1; if(world[xpos][ypos] == Survivor) {onBoard++;};world[xpos][ypos] = Visited;} -> Skip;
+MoveLeftIfNotVisited() = [MoveLeftCond && MoveLeftCondNotVisited] moveLeft{ypos = ypos - 1; if(world[xpos][ypos] == Survivor) {onBoard++;}; world[xpos][ypos] = Visited;} -> Skip;
+
+#define MoveRightCond (ypos != Cols - 1) && (world[xpos][ypos+1] != Hostile) && (onBoard != maxCapacity || world[xpos][ypos+1] != Survivor);
+#define MoveRightCondVisited (world[xpos][ypos+1] == Visited);
+#define MoveRightCondNotVisited (world[xpos][ypos+1] != Visited);
+MoveRightIfVisited() = [MoveRightCond && MoveRightCondVisited] moveRight{ypos = ypos + 1; if(world[xpos][ypos] == Survivor) {onBoard++;}; world[xpos][ypos] = Visited;} -> Skip;
+MoveRightIfNotVisited() = [MoveRightCond && MoveRightCondNotVisited] moveRight{ypos = ypos + 1; if(world[xpos][ypos] == Survivor) {onBoard++;}; world[xpos][ypos] = Visited;} -> Skip;
+
+// MoveIfNotVisited attempts to move to the next location that has not previously been visited
+MoveIfNotVisited() = MoveUpIfNotVisited() [] MoveDownIfNotVisited() [] MoveLeftIfNotVisited() [] MoveRightIfNotVisited();
+// MoveIfVisited attempts to move to the next location that has previously been visited
+MoveIfVisited() = MoveUpIfVisited() [] MoveDownIfVisited() [] MoveLeftIfVisited() [] MoveRightIfVisited();
+// UnVisitedMove priortises MoveIfNotVisited moves, but uses MoveIfVisited when necessary.
+UnvisitedMove() = (MoveIfVisited() [] MoveIfNotVisited());Skip;
+// VisitedMove priortises MoveIfVisited moves, but uses MoveIfNotVisited when necessary.
+VisitedMove() = (MoveIfNotVisited() [] MoveIfVisited());Skip;
+
+RobotNavigators() = (MoveIfNotVisited()
+					[] MoveIfVisited()
+					[] UnvisitedMove()
+					[] VisitedMove());
+
+

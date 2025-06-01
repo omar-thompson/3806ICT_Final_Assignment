@@ -1,0 +1,46 @@
+
+#include "planner.csp";
+
+//Primitive Goals 
+/*
+goalAreaChecked:
+This goal attempts to mark all locations as visited, and to return to the home position
+during the process.
+
+noSurvivors:
+This goal ensures that all locations are void of survivors if there are remaining spaces
+on the bot (onBoard != maxCapacity). In the case that the bot has reached maximum carrying
+capacity, survivors are left on the board. In both cases, there is the additional goal of
+returning the robot back home.
+*/
+
+#define home (xpos == SUB_HOME_X && ypos == SUB_HOME_Y);
+//// primitive goal, entire survey area has been checked for survivors
+#define goalAreaChecked (&& i:{0..Rows-1}@(&& j:{0..Cols-1}@(world[i][j] == Visited || world[i][j] == Hostile)) && home);
+//// primitive goal, entire survey area is clear of known survivors, and has returned home if sub hit max capacity
+#define noSurvivors ((&& i:{0..Rows-1}@(&& j:{0..Cols-1}@(world[i][j] != Survivor)) && (onBoard != maxCapacity || home)) || (onBoard == maxCapacity &&home));
+
+
+//translating goals as processes 
+//
+//MadeItHome() = [home]RobRun();MadeItHome();
+//AreaChecked() = [goalAreaChecked]RobRun();AreaChecked();
+//CompleteGoal() =[home && goalAreaChecked && noSurvivors]RobRun();CompleteGoal();
+//
+//OverallGoal() = MadeItHome();AreaChecked();CompleteGoal();
+
+//MadeItHome() = [home] madeItHomeEvent -> Skip;
+//AreaChecked() = [goalAreaChecked] areaCheckedEvent -> Skip;
+//CompleteGoal() = [home && goalAreaChecked && noSurvivors] completeGoalEvent -> Skip;
+
+
+AreaChecked() = [!goalAreaChecked]RobRun();AreaChecked();
+NoSurvivors() = [!noSurvivors]RobRun();NoSurvivors();
+MadeItHome() = [!home]RobRun(); MadeItHome();
+
+OverallGoal() = AreaChecked(); NoSurvivors(); MadeItHome();
+//OverallGoal() = RobRun(); MadeItHome(); AreaChecked(); CompleteGoal();
+
+Goal() = OverallGoal();
+
+#assert Goal() reaches home;

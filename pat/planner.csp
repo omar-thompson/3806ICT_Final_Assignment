@@ -1,0 +1,15 @@
+#include "executor.csp";
+
+
+RobMove() = (MoveIfNotVisited()
+			[] MoveIfVisited()
+			[] UnvisitedMove()
+			[] VisitedMove());
+
+RobotSearch() = RobMove();RobRun();
+
+RobotContact() = RobMove();RobRun();
+
+RobotRescue() = RobMove();RobRun();
+
+RobRun() = RobotSearch() [] RobotContact() [] RobotRescue();

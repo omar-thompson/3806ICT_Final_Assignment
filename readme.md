@@ -1,15 +1,15 @@
 # 3806ICT Final Assignment 3 by:
 
 -  Omar Thompson| s5327969 
--  Hayley Naidoo | Change
--  Thomas Smith | Change
--  William Smallacomb | Change
+-  Hayley Naidoo | s5225359
+-  Thomas Smith | s5333902
+-  William Smallacomb | s5400330
 
 ** Will need to change the below when ready **
 
-This project requires an Ubuntu environment with ROS, Gazebo, and PAT installed. It models a _____ as it explores its environment in a linear 2D fashion. The environment is resolved into a grid, where each position can contain a hostile entity, a survivor, or a marker to indicate whether it has been visited.
+This project requires an Ubuntu environment with ROS, Gazebo, and PAT installed. It is meant to improve on an existing implementation of the same system, structure and code by prioritising the implementation of a Heirarchial AI agent decision making structure. 
 
-Gazebo simulates the environment and provides a 3D representation in real-time. ROS drives the _____ main control loop, which extracts a list of moves to achieve pre-defined goals from PAT. For example, PAT is called via the command line to achieve a goal, such as "return home", and returns a list of moves to a text file. ROS reads this text file and iteratively translates this moveset into a positioning system, using emulated sensors to react to its immediate surroundings.
+Gazebo simulates the environment and provides a 3D representation in real-time. ROS drives the  main control loop, which extracts a list of moves from PAT. PAT then using a Heirarchial Decision making structure interprets the input, makes a plan, executes and then validates that it works. 
 
 To successfully run this project on your own machine:
 
@@ -17,12 +17,10 @@ To successfully run this project on your own machine:
 2. Compile the binaries in catkin_ws/src using catkin_make.
 3. Launch the pre-set world which includes a birds-eye camera angle:
    `roslaunch assignment_3 launch_world.launch`
-4. Run the update_grid node: `rosrun assignment_3 update_grid` in a new terminal window. This hosts three services used by the main submarine controller:
+4. Run the update_grid node: `rosrun assignment_3 update_grid` in a new terminal window. 
+5. Run the search_rescue node: `rosrun assignment_3 search_rescue`
 
-   -  hostile_sensor: Emulates a sensor (such as a sonar) to detect hostiles within a given grid-range
-   -  survivor_sensor: Emulates a sensor (such as infrared) to detect survivors within a given grid-range
-   -  update_grid: This facilitates the communication between the main submarine controller and update_grid. It allows for gazebo to continue simulating the submarine as it moves throughout the environment and picks up survivors.
+With the implementation of the new decsion making structure the program is nor more reusable, provides modularity, introduces deliberative reasoning that is goal focussed.
 
-5. Run the search_rescue node: `rosrun assignment_3 search_rescue` in a new terminal window. This is the main driver of the submarine which communicates with PAT and translates the provided moveset into actions. It maintains an internal representation of where the submarine has visited which is updated each time it detects a hostile or survivor (as informed by the hostile_sensor and survivor_sensor services).
 
 **Please note that the project depends on the direct path to the PAT installation. Currently, it is set to `/Desktop/MONO-PAT-v3.6.0/PAT3.Console.exe`. If this path is incorrect, either relocate PAT to the expected path, or change `PAT_EXE_DIR` in the program to the correct path. This `#define` is located in `search_rescue.cpp` on line 29**
