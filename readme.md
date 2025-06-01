@@ -5,7 +5,6 @@
 -  Thomas Smith | s5333902
 -  William Smallacomb | s5400330
 
-** Will need to change the below when ready **
 
 This project requires an Ubuntu environment with ROS, Gazebo, and PAT installed. It is meant to improve on an existing implementation of the same system, structure and code by prioritising the implementation of a Heirarchial AI agent decision making structure. 
 
@@ -20,7 +19,7 @@ To successfully run this project on your own machine:
 4. Run the update_grid node: `rosrun assignment_3 update_grid` in a new terminal window. 
 5. Run the search_rescue node: `rosrun assignment_3 search_rescue`
 
-With the implementation of the new decsion making structure the program is nor more reusable, provides modularity, introduces deliberative reasoning that is goal focussed.
+With the implementation of the new decsion making structure the program is more reusable, provides modularity, introduces deliberative reasoning that is goal focussed.
 
 
 **Please note that the project depends on the direct path to the PAT installation. Currently, it is set to `/Desktop/MONO-PAT-v3.6.0/PAT3.Console.exe`. If this path is incorrect, either relocate PAT to the expected path, or change `PAT_EXE_DIR` in the program to the correct path. This `#define` is located in `search_rescue.cpp` on line 29**
